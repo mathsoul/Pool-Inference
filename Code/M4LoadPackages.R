@@ -1,0 +1,11 @@
+library(tidyverse)
+library(gurobi)
+library(nlshrink)
+library(MASS)
+# Parallel computation
+library(doParallel)
+library(MCMCpack)
+library(doRNG)
+library(AggPool)
+# source("Code/func.R")
+pkg_names = c("tidyverse", "gurobi", "nlshrink", "MASS", "AggPool")
