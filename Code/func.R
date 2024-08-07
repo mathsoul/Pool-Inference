@@ -1,3 +1,19 @@
+getSepUMethods = function(idx, methods, n, f_sep, u_sep, true_sep){
+  n_methods = length(methods)
+  u_comb_mat = matrix(NA, n_methods, ncol(u_sep))
+  
+  for(i in 1:n_methods){
+    f_comb_agg = map_dfc(1:ncol(u_sep), ~ aggForecast(f_sep[idx,.x], u_sep[idx,],
+                                             .x, m = 1, n = n, n_days - 1,
+                                             cov_type = methods[i]))
+    
+    u_comb_mat[i,] = as.numeric(f_comb_agg - true_sep)
+  }
+  
+  u_comb_mat
+} 
+
+
 get1SimPoolVar = function(cov_u, n_obs, n_experts, n_products){
   df_train = rmvnorm(n_obs, sigma = cov_u)
   cov_lin = linshrink_cov(df_train)
@@ -25,11 +41,6 @@ getPoolWeights = function(cov_inv_train, n_products, n_experts){
   weights = solve(B) %*% G
   return(weights)
 }
-
-
-
-
-
 
 getWRMSSE4AllMethods = function(series_idx, data_test, f_data, u_data, n_experts, n_sub, n_items, n_days,
                                 min_idx, max_idx){
@@ -369,7 +380,7 @@ getConstCorCov = function(u_in){
   return(cov_est)
 }
 
-MS_method2 <- function(train_data){
+SoptPlusEW <- function(train_data){
   X <- as.matrix(train_data)
   n = nrow(train_data)
   k = ncol(train_data)
@@ -613,100 +624,39 @@ getPooledU = function(idx, cov_type, m, n,f_comb, u_comb, true_data){
 aggForecast = function(f_vec, u_mat, out_idx, m, n, n_days, cov_type = "Sample"){
   u_in = t(u_mat[,-out_idx])
   mean_in = colMeans(u_in)
-  #rewrite svd version
-  # u_in_demean = scale(u_in, center = TRUE, scale = FALSE)
-  # svd_in = svd(u_in_demean, nu = 0, nv = 1)
   
-  # n_PC = which.max(map_dbl(1:8,~BaiNG_measure(.x, svd_in$d^2, m*n, n_days)))
-  
-  # mean plugin
-  # plugin_value = mean(svd_in$d[-1]^2)
-  # cov_est = (plugin_value * diag(m*n) + (svd_in$d[1]^2 - plugin_value) * svd_in$v %*% t(svd_in$v))/n_days
-  
-  if(cov_type == "Ville"){
-    X = list()
-    for(i in 1:m){
-      X = c(X, list(unlist(f_vec)[(1:n) + (i-1)*n]))
-    }
-    
-    MEAN_AU_HET = anova_update(X, MEAN = mean, anova = "HET", lme_method = "REML")
-    return(MEAN_AU_HET$AU)
-    
-    # X = list(c(100, 110, 130, 150, 105),
-    #          c(90, 85, 76, 94),
-    #          c(86, 72, 85, 100, 99))
-    
-  }
-  
-  if(cov_type == "NonLin"){
-    cov_est = try(nlshrink_cov(u_in))
-    if(class(cov_est)[1] == "try-error"){
-      print(paste0(out_idx, "NonLin failes"))
-      cov_est = diag(ncol(u_in))
-    }else{
-      if(kappa(cov_est) > 1e10){
-        print(paste0(out_idx, "Cond is too large"))
-        cov_est = diag(ncol(u_in))
-      }
-      
-    }
-    
-    # cov_type = "EW"
-  }
-  
-  #PC+EW plugin
   if(cov_type == "EW"){
-    one_vec = rep(1, m*n)
-    Proj_EW = one_vec - one_vec %*% svd_in$v[,1] %*% t(svd_in$v[,1])
-    plugin_value = sum((u_in_demean %*% t(Proj_EW))^2 )/sum(Proj_EW^2)
-    cov_est = (plugin_value * diag(m*n) + (svd_in$d[1]^2 - plugin_value) * svd_in$v %*% t(svd_in$v))/n_days
-  }
-  
-  # Factor such that individual variance is matched
-  if(cov_type == "Factor"){
-    X_PC1 = u_in_demean %*% svd_in$v[,1,drop = FALSE]
-    OLS_result = lm(u_in ~ X_PC1)
-    
-    beta = OLS_result$coefficients[2,, drop = FALSE]
-    var_eps = apply(OLS_result$residuals, 2, var)
-    
-    cov_est = c(var(X_PC1)) * t(beta) %*% beta + diag(var_eps)
-  }
-  
-  if(cov_type == "Var"){
-    cov_est = diag(diag(cov(u_in)))
-  }
-  
-  if(cov_type == "Rob"){
-    cov_est = cov.rob(u_in)$cov
-  }
-  
-  # NonLin Shrink
-  # cov_est = nlshrink_cov(u_in) #it breaks
-  
-  # Linear Shrink
-  if(cov_type == "Linear"){
-    cov_est = linshrink_cov(u_in)
+    return(mean(pull(f_vec)))
   }
   
   if(cov_type == "Sample"){
     cov_est = cov(u_in)
   }
   
+  if(cov_type == "Linear"){
+    cov_est = linshrink_cov(u_in)
+  }
+  
   if(cov_type == "Cor"){
     cov_est = getConstCorCov(u_in)
   }
   
-  
-  if(cov_type == "MS"){
-    w_MS = MS_method2(u_in)
-    return(w_MS %*% unlist(f_vec - mean_in))
+  if(cov_type == "Var"){
+    cov_est = diag(diag(cov(u_in)))
   }
   
-  cov_est = cov_est  + 1e-8 * diag(ncol(u_in))
+  if(cov_type == "S+EW"){
+    w_SEW = SoptPlusEW(u_in)
+    return(w_SEW %*% unlist(f_vec - mean_in))
+  }
+  
+  if(cov_type == "Rob"){
+    cov_est = cov.rob(u_in)$cov
+  }
   
   
   if(m > 1){
+    #need update
     f_agg = getMLEFromGurobi(unlist(f_vec - mean_in), solve(cov_est), m, n)
   }else{
     w = rowSums(solve(cov_est))
