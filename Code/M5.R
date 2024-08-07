@@ -1,8 +1,6 @@
 library(tidyverse)
 library(nlshrink)
 library(MASS)
-library(gurobi)
-# change gurobi code to matrix inversion
 source("Code/func.R")
 
 load("CleanedData/M5.Rdata")
@@ -10,7 +8,7 @@ load("CleanedData/M5.Rdata")
 n_experts = 50
 n_days = 28
 
-n_sub = 15
+n_sub = 10
 
 methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
 n_methods = length(methods)
@@ -344,3 +342,6 @@ display_mat["L9",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
 # Print out results -------------------------------------------------------
 print(display_mat, digits = 3)
 print(apply(display_mat, 1, which.min))
+
+library(xtable)
+xtable(display_mat, digits = 3)
