@@ -1,5 +1,5 @@
 ## Reproducibility
-The results of the M5 dataset could be reproduced directly by running file M5.R, while the results of the M4 dataset are not. The reason is that the latter takes a long time (several days) to run without parallel computation. Unfortunately, the parallel computation mysteriously fails on one of our computers. Thus, to avoid this issue, we only include a demo (file M4.R) of the M4 dataset using all 17 teams and 119 variables. The result still shows that P:Linear dominates other benchmarks.
+The results of the M5 dataset could be reproduced directly by running file M5.R, while the results of the M4 dataset are not. The reason is that the latter takes a long time (several days) to run without parallel computation. Unfortunately, the parallel computation mysteriously fails on one of our computers and requires the user to build a package. Thus, to avoid these issues, we only include a demo (file M4.R) of the M4 dataset using all 17 teams and 119 variables. The result still shows that P:Linear dominates other benchmarks.
 
 The simulation results could be reproduced by running file simulation.R.
 
