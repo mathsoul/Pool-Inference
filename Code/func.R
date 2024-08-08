@@ -73,7 +73,7 @@ aggForecast = function(f_vec, u_mat, out_idx, m, n, n_days, cov_type = "Sample")
   }
   
   if(cov_type == "Rob"){
-    cov_est = cov.rob(u_in)$cov
+    cov_est = cov.rob(u_in,seed = 1:20240422)$cov + 1e-8 * diag(n) #to prevent generate a singular covariance estimation
   }
   
   if(m > 1){
@@ -132,4 +132,11 @@ getWRMSSE = function(u_mat, weight_vec = NULL){
   }
   
   sqrt(rowMeans(u_mat^2)) %*% weight_vec
+}
+
+extractNSub <- function(input_string) {
+  # Use regular expression to extract the number after "Idx"
+  match <- regmatches(input_string, regexpr("Idx(\\d+)", input_string))
+  number <- as.numeric(sub("Idx", "", match))
+  return(number)
 }

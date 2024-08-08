@@ -5,17 +5,23 @@ source("Code/func.R")
 
 load("CleanedData/M5.Rdata")
 
-n_experts = 50
-n_days = 28
-
-n_sub = 10
+n_experts = 50 #total number of experts
+n_days = 28 #number of observations
 
 methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
 n_methods = length(methods)
 
-load(paste0("TeamIndex/MaxMinIdx",n_sub,".Rdata"))
+team_idx_name = "TeamIndex/MinIdx2.Rdata" #Table 5
+# team_idx_name = "TeamIndex/MinIdx15.Rdata" #Table 6
+# team_idx_name = "TeamIndex/MinIdx3.Rdata" #Table EC.1
+# team_idx_name = "TeamIndex/MinIdx10.Rdata" #Table EC.2
+# team_idx_name = "TeamIndex/MaxIdx2.Rdata" #Table EC.5
+# team_idx_name = "TeamIndex/MaxIdx15.Rdata" #Table EC.6
+# team_idx_name = "TeamIndex/Max17Idx2.Rdata" #Table EC.9
+# team_idx_name = "TeamIndex/Max17Idx15.Rdata" #Table EC.10
 
-#change min_idx to Team_idx
+n_sub = extractNSub(team_idx_name) #number of experts in aggregation
+load(team_idx_name)
 
 display_mat = matrix(NA, nrow = 8, ncol = 1 + length(methods),
                      dimnames = list(paste0("L",2:9), 
@@ -38,7 +44,7 @@ u_comb = as.matrix(f_comb - as.matrix(true_data[,-1])  %x% rep(1, n_experts))
 
 n_state = length(state_vec)
   
-pool_idx = rep(min_idx$L2, n_state) + rep(0:(n_state - 1) * n_experts, each = n_sub)
+pool_idx = rep(idx$L2, n_state) + rep(0:(n_state - 1) * n_experts, each = n_sub)
   
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_state, n_sub, 
                            f_comb, u_comb, true_data)
@@ -51,7 +57,7 @@ for(i in 1:n_state){
   
   u_sep = t(t(f_sep) - as.numeric(true_sep))
   
-  u_sep_methods[,i,] = getSepUMethods(min_idx$L2, methods, n = n_sub, f_sep, u_sep, true_sep)
+  u_sep_methods[,i,] = getSepUMethods(idx$L2, methods, n = n_sub, f_sep, u_sep, true_sep)
 }
 
 display_mat["L2",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
@@ -72,7 +78,7 @@ u_comb = as.matrix(f_comb - as.matrix(true_data[,-1])  %x% rep(1, n_experts))
 
 n_store = length(store_vec)
 
-pool_idx = rep(min_idx$L3, n_store) + rep(0:(n_store - 1) * n_experts, each = n_sub)
+pool_idx = rep(idx$L3, n_store) + rep(0:(n_store - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_store, n_sub, 
                            f_comb, u_comb, true_data)
@@ -85,7 +91,7 @@ for(i in 1:n_store){
   
   u_sep = t(t(f_sep) - as.numeric(true_sep))
   
-  u_sep_methods[,i,] = getSepUMethods(min_idx$L3, methods, n = n_sub, f_sep, u_sep, true_sep)
+  u_sep_methods[,i,] = getSepUMethods(idx$L3, methods, n = n_sub, f_sep, u_sep, true_sep)
 }
 
 display_mat["L3",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
@@ -106,7 +112,7 @@ u_comb = as.matrix(f_comb - as.matrix(true_data[,-1])  %x% rep(1, n_experts))
 
 n_cat = length(cat_vec)
 
-pool_idx = rep(min_idx$L4, n_cat) + rep(0:(n_cat - 1) * n_experts, each = n_sub)
+pool_idx = rep(idx$L4, n_cat) + rep(0:(n_cat - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_cat, n_sub, 
                            f_comb, u_comb, true_data)
@@ -119,7 +125,7 @@ for(i in 1:n_cat){
   
   u_sep = t(t(f_sep) - as.numeric(true_sep))
   
-  u_sep_methods[,i,] = getSepUMethods(min_idx$L4, methods, n = n_sub, f_sep, u_sep, true_sep)
+  u_sep_methods[,i,] = getSepUMethods(idx$L4, methods, n = n_sub, f_sep, u_sep, true_sep)
 }
 
 display_mat["L4",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
@@ -141,7 +147,7 @@ u_comb = as.matrix(f_comb - as.matrix(true_data[,-1])  %x% rep(1, n_experts))
 
 n_dept = length(dept_vec)
 
-pool_idx = rep(min_idx$L5, n_dept) + rep(0:(n_dept - 1) * n_experts, each = n_sub)
+pool_idx = rep(idx$L5, n_dept) + rep(0:(n_dept - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_dept, n_sub, 
                            f_comb, u_comb, true_data)
@@ -154,7 +160,7 @@ for(i in 1:n_dept){
   
   u_sep = t(t(f_sep) - as.numeric(true_sep))
   
-  u_sep_methods[,i,] = getSepUMethods(min_idx$L5, methods, n = n_sub, f_sep, u_sep, true_sep)
+  u_sep_methods[,i,] = getSepUMethods(idx$L5, methods, n = n_sub, f_sep, u_sep, true_sep)
 }
 
 display_mat["L5",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
@@ -177,7 +183,7 @@ f_comb = f_data %>% arrange(state_id, cat_id, group_id) %>% ungroup() %>%
   dplyr::select(-state_id, - cat_id, -group_id)
 u_comb = as.matrix(f_comb - as.matrix(true_data[,-c(1,2)])  %x% rep(1, n_experts))
 
-pool_idx = rep(min_idx$L6, n_state * n_cat) + 
+pool_idx = rep(idx$L6, n_state * n_cat) + 
   rep(0:(n_state * n_cat - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_state * n_cat, n_sub, 
@@ -197,7 +203,7 @@ for(i in 1:n_state){
     u_sep = t(t(f_sep) - as.numeric(true_sep))
     
     u_sep_methods[,variable_idx,] = 
-      getSepUMethods(min_idx$L6, methods, n = n_sub, f_sep, u_sep, true_sep)
+      getSepUMethods(idx$L6, methods, n = n_sub, f_sep, u_sep, true_sep)
   }
 }
 
@@ -221,7 +227,7 @@ f_comb = f_data %>% arrange(state_id, dept_id, group_id) %>% ungroup() %>%
   dplyr::select(-state_id, - dept_id, -group_id)
 u_comb = as.matrix(f_comb - as.matrix(true_data[,-c(1,2)])  %x% rep(1, n_experts))
 
-pool_idx = rep(min_idx$L7, n_state * n_dept) + 
+pool_idx = rep(idx$L7, n_state * n_dept) + 
   rep(0:(n_state * n_dept - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_state * n_dept, n_sub, 
@@ -241,7 +247,7 @@ for(i in 1:n_state){
     u_sep = t(t(f_sep) - as.numeric(true_sep))
     
     u_sep_methods[,variable_idx,] = 
-      getSepUMethods(min_idx$L7, methods, n = n_sub, f_sep, u_sep, true_sep)
+      getSepUMethods(idx$L7, methods, n = n_sub, f_sep, u_sep, true_sep)
   }
 }
 
@@ -265,7 +271,7 @@ f_comb = f_data %>% arrange(store_id, cat_id, group_id) %>% ungroup() %>%
   dplyr::select(-store_id, - cat_id, -group_id)
 u_comb = as.matrix(f_comb - as.matrix(true_data[,-c(1,2)])  %x% rep(1, n_experts))
 
-pool_idx = rep(min_idx$L8, n_store * n_cat) + 
+pool_idx = rep(idx$L8, n_store * n_cat) + 
   rep(0:(n_store * n_cat - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_store * n_cat, n_sub, 
@@ -285,7 +291,7 @@ for(i in 1:n_store){
     u_sep = t(t(f_sep) - as.numeric(true_sep))
     
     u_sep_methods[,variable_idx,] = 
-      getSepUMethods(min_idx$L8, methods, n = n_sub, f_sep, u_sep, true_sep)
+      getSepUMethods(idx$L8, methods, n = n_sub, f_sep, u_sep, true_sep)
   }
 }
 
@@ -310,7 +316,7 @@ f_comb = f_data %>% arrange(store_id, dept_id, group_id) %>% ungroup() %>%
   dplyr::select(-store_id, - dept_id, -group_id)
 u_comb = as.matrix(f_comb - as.matrix(true_data[,-c(1,2)])  %x% rep(1, n_experts))
 
-pool_idx = rep(min_idx$L9, n_store * n_dept) + 
+pool_idx = rep(idx$L9, n_store * n_dept) + 
   rep(0:(n_store * n_dept - 1) * n_experts, each = n_sub)
 
 u_pool_Linear = getPooledU(pool_idx, "Linear", n_store * n_dept, n_sub, 
@@ -330,7 +336,7 @@ for(i in 1:n_store){
     u_sep = t(t(f_sep) - as.numeric(true_sep))
     
     u_sep_methods[,variable_idx,] = 
-      getSepUMethods(min_idx$L9, methods, n = n_sub, f_sep, u_sep, true_sep)
+      getSepUMethods(idx$L9, methods, n = n_sub, f_sep, u_sep, true_sep)
   }
 }
 
@@ -345,3 +351,4 @@ print(apply(display_mat, 1, which.min))
 
 library(xtable)
 xtable(display_mat, digits = 3)
+
