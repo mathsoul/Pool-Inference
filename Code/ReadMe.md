@@ -10,4 +10,4 @@ We did not include the code for data manipulation due to the massive size of the
 We did not include the code for an alternative method of choosing teams by solving the maximum diversity problem for two reasons. First, empirical results show that the outcomes are similar to those from selecting the top teams. Thus, we want to focus on the differences between the M4 and M5 datasets, rather than the methods of team selection. Second, we used the gurobi package to solve the maximum diversity problem, which requires a GUROBI solver license that users might not have. Additionally, installing the Gurobi package involves a non-standard procedure that could confuse users. Instead, we have included the solutions to the maximum diversity problem in the TeamIndex folder.
 
 ## File func.R 
-This file contains all the functions needed in this repository. For the functions that directly link to pool inference, we provide detailed documentation. 
+This file contains all the functions needed in this repository. We provide documentation to explain the functions, especially the ones that avoid large matrix multiplication when the number of products is massive.

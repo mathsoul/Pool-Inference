@@ -1,8 +1,8 @@
 ## M4.Rdata
 - It contains three data frames: data_test, f_data, and u_data.
-   - data_test: the test data of all hourly time series.
-   - f_data: forecasts from top 17 experts for all hourly time series.
-   - u_data: forecast errors from top 17 experts for all hourly time series.
+   - data_test: the test data of all hourly time series with StartingDate being "1/7/15 12:00."
+   - f_data: forecasts from top 17 experts for all hourly time series with StartingDate being "1/7/15 12:00."
+   - u_data: forecast errors from top 17 experts for all hourly time series with StartingDate being "1/7/15 12:00."
 
 ## M5.Rdata
 - It contains four types of data frames: df_true, pred_all, scale2, and df_weight.
