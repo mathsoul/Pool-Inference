@@ -1,11 +1,12 @@
-#tobe changed
 getPoolWeights = function(cov_inv, n_products, n_experts){
+  # Formula from Proposition 3 
   E = diag(n_products) %x% matrix(1, n_experts, 1)
   weights = cov_inv %*% E %*% solve(t(E) %*% cov_inv %*% E)
   return(weights)
 }
 
 getPooledU = function(idx, cov_type, m, n,f_comb, u_comb, true_data){
+  #Leave-one-out result using map_dfc
   f_comb_agg = map_dfc(1:ncol(true_data), ~ aggForecast(f_comb[idx,.x], u_comb[idx,],
                                            .x, m = m, n = n, n_days - 1,
                                            cov_type = cov_type))
@@ -148,11 +149,13 @@ extractNSub <- function(input_string) {
 }
 
 sumEachProd = function(u_vec, n_products, n_experts){
+  #speed up large matrix multiplication involving matrix E (Proposition 3)
   map_dbl(1:n_products,~sum(u_vec[1:n_experts + (.x-1) * n_experts ]))
 }
 
 getLambdaFromLinShrink = function(svd_X, X){ 
   # only use this function when n_products * n_experts > n_obs
+  # it avoids calculating the sample covariance matrix, which could be massive when n_products is large
   # We rescale linshrink_cov to be (n_obs-1) S + lambda I 
   
   n = length(svd_X$d)
@@ -178,6 +181,9 @@ getLambdaFromLinShrink = function(svd_X, X){
 
 
 getFastPoolLinearTestU = function(X, X_test, n_products, n_experts, n_obs){
+  # We use the Woodbury inequality to derive this algorithm
+  # We have checked that it returns the same result as using getPoolWeights
+  # X_test has been debiased using train average (mu_vec or mean_in)
   X = scale(X, scale = FALSE) #demean
   svd_X = svd(X, nu = 0, nv = n_obs - 1)
   
@@ -197,6 +203,8 @@ getFastPoolLinearTestU = function(X, X_test, n_products, n_experts, n_obs){
 
 
 simData = function(n_sim, sigma2_x, sigma2_vec, sigma2_eps, n_products, n_experts){
+  # When the number of products is large, we could not directly generate data using multivariate normal
+  # We have checked that when n_sim is large, the sample covariance matrix is similar to the true covariance matrix
   prod_rand = matrix(rnorm(n_products * n_sim, sd = sqrt(sigma2_x)), nrow = n_sim)
   expert_rand = rmvnorm(n_sim, sigma = diag(sigma2_vec))
   idio_rand = matrix(rnorm(n_sim * n_products * n_experts, sd = sqrt(sigma2_eps)), nrow = n_sim )
