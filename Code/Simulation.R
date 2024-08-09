@@ -7,38 +7,50 @@ set.seed(20240422)
 
 n_experts = 15
 
-n_prod_vec = c(3, 7, 9, 10, 21, 30, 70)
+n_prod_vec = c(3, 7, 9, 10, 21, 30, 70) #700, 7000
 length_prod_vec = length(n_prod_vec)
 
 sigma2_x = 1
-# sigma2_vec = c(rep(1, 7) , rep(5, 8)) #Table 9
-sigma2_vec = c(rep(1, 7) , rep(60, 8)) #Table 10 
+sigma2_vec = c(rep(1, 7) , rep(5, 8)) #Table 9
+# sigma2_vec = c(rep(1, 7) , rep(60, 8)) #Table 10 
 sigma2_eps = 30
 
-#It takes several minutes to run M = 100. One could reduce the time by setting M = 10
-M = 1
+#It takes a long time to run M = 100. One could reduce the time by setting M = 10
+M = 100
 
 n_obs = 47
+#It takes a long time to run n_test = 3000. One could reduce the time by setting n_test = 1000
+n_test = 3000
 
-var_array = array(NA, dim = c(M, 3, length_prod_vec))
+RMSE_array = array(NA, dim = c(M, 3, length_prod_vec))
 
+time_vec = rep(NA, length_prod_vec)
 
 for(i in 1:length_prod_vec){
   n_products = n_prod_vec[i]
   
   cov_ui = sigma2_x + diag(sigma2_vec + sigma2_eps)
-  cov_u = diag(n_products) %x% matrix(sigma2_x, n_experts, n_experts) +
-    matrix(1, n_products, n_products) %x% diag(sigma2_vec) +
-    sigma2_eps * diag(n_products) %x% diag(n_experts)
   
-  var_array[,1,i] = map_dbl(1:M, ~ get1SimPoolVar(cov_u, n_obs, n_products, n_experts))
+  data_test = simData(n_test, sigma2_x, sigma2_vec, sigma2_eps, n_products, n_experts)
   
-  var_array[,2,i] = mean(cov_ui)
-  var_array[,3,i] = 1/sum(solve(cov_ui))
+  start_time = Sys.time()
+  
+  RMSE_array[,1,i] = 
+    map_dbl(1:M, ~ get1SimPoolRMSE(data_test, n_obs, sigma2_x, sigma2_vec, sigma2_eps, n_products, n_experts))
+  
+  end_time = Sys.time()
+  
+  time_vec[i] = as.numeric(difftime(end_time, start_time, units = "secs"))
+  
+  print(paste(n_products, round(time_vec[i],3)))
+  
+  RMSE_array[,2,i] = sqrt(mean(cov_ui))
+  RMSE_array[,3,i] = sqrt(1/sum(solve(cov_ui)))
 }
 
-print(t(apply(var_array, 3, colMeans)), digits = 4)
 
-print(apply(var_array, 3, function(x) mean(x[,1] < x[,3])), digits = 3)
+print(t(apply(RMSE_array, 3, colMeans)), digits = 4)
+
+print(apply(RMSE_array, 3, function(x) mean(x[,1] < x[,3])), digits = 3)
 
 
