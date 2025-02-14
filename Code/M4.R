@@ -1,43 +1,56 @@
 library(tidyverse)
 library(nlshrink)
 library(MASS)
+library(xtable)
+# Parallel computation
+library(MCMCpack)
+library(doParallel)
+library(doRNG)
+pkg_names = c("tidyverse", "nlshrink", "MASS")
+
 source("Code/func.R")
 
 load("CleanedData/M4.Rdata")
 
-n_experts = 17 #total number of experts
+# team_idx_name = "TeamIndex/M4TopIdx2.Rdata" #Table 7. Takes 3 hours using 7 cores.
+# team_idx_name = "TeamIndex/M4TopIdx15.Rdata" #Table 8. Takes 5 hours using 7 cores.
+team_idx_name = "TeamIndex/M4TopIdx3.Rdata" #Table EC.3. Takes 4 hours using 7 cores.
+# team_idx_name = "TeamIndex/M4TopIdx10.Rdata" #Table EC.4. Takes 4 hours using 7 cores.
+# team_idx_name = "TeamIndex/M4MaxIdx2.Rdata" #Table EC.7. Takes 3 hours using 7 cores.
+# team_idx_name = "TeamIndex/M4MaxIdx15.Rdata" #Table EC.8. Takes 5 hours using 7 cores.
+
+load(team_idx_name)
+
+n_sim = 100 #number of simulations
 n_periods = 48 #number of observations
-n_prods = 119
 
-methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
-n_methods = length(methods)
+prods_vec = c(3, 7, 9, 10, 21, 30, 70)
 
-display_mat = matrix(NA, nrow = 1, ncol = 1 + length(methods),
-                     dimnames = list("All", 
-                                     c("P:Linear", "S:EW", "S:Sample", "S:Linear",
-                                       "S:Cor", "S:S+EW", "S:Var", "S:Rob")))
+sep_methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
 
-true_data = data_test %>% dplyr::select(-V1)
-f_comb = f_data %>% dplyr::select(-id, -group_id)
-u_comb = u_data %>% dplyr::select(-id, -group_id)
+display_mat = matrix(NA, nrow = length(prods_vec), ncol = 1 + length(sep_methods))
+win_pct_vec = rep(NA, length(prods_vec))
+names(win_pct_vec) = prods_vec
 
-pool_idx = rep(1:n_experts, n_prods) + rep(0:(n_prods - 1) * n_experts, each = n_experts)
-
-u_pool_Linear = getPooledU(pool_idx, "Linear", n_prods, n_experts, f_comb, u_comb, true_data)
-
-u_sep_methods = array(NA, dim = c(n_methods, n_prods, n_periods), dimnames = list(methods))
-
-for(i in 1:n_prods){
-  single_prod_idx = 1:n_experts + (i-1) * n_experts
+for(j in 1:length(prods_vec)){
+  start_time = Sys.time()
   
-  true_sep = true_data[i,]
-  f_sep = tibble(f_comb[single_prod_idx,]) 
-  u_sep = u_comb[single_prod_idx,]
+  # parallel computation might fail for Windows
+  WRMSSE_mat = parallelCalM4(j, series_idx_all, team_idx_all, sep_methods,
+                             data_test, f_data, u_data, n_periods)
   
-  u_sep_methods[,i,] = getSepUMethods(1:n_experts, methods, n = n_experts, f_sep, u_sep, true_sep)
+  display_mat[j,] = round(colMeans(WRMSSE_mat),3)
+  win_pct_vec[j] = table(apply(WRMSSE_mat, 1, which.min))[1]/n_sim
+  
+  end_time = Sys.time()
+  print(end_time - start_time)
 }
 
-display_mat["All",] = c(getWRMSSE(u_pool_Linear), apply(u_sep_methods, 1, getWRMSSE))
+rownames(display_mat) = prods_vec
 
-print(display_mat, digits = 3)
-## 0.284 1.09 0.453 0.518 0.672 0.431 0.771  0.67
+xtable(display_mat, digits = 3)
+win_pct_vec
+
+
+
+

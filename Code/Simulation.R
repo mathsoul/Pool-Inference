@@ -7,7 +7,7 @@ set.seed(20240422)
 
 n_experts = 15
 
-n_prod_vec = c(3, 7, 9, 10, 21, 30, 70) #700, 7000
+n_prod_vec = c(3, 7, 9, 10, 21, 30, 70, 700, 7000) #
 length_prod_vec = length(n_prod_vec)
 
 sigma2_x = 1
