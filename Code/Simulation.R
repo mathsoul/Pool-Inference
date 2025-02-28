@@ -12,7 +12,7 @@ length_prod_vec = length(n_prod_vec)
 
 sigma2_x = 1
 sigma2_vec = c(rep(1, 7) , rep(5, 8)) #Table 9
-# sigma2_vec = c(rep(1, 7) , rep(60, 8)) #Table 10 
+# sigma2_vec = c(rep(1, 7) , rep(60, 8)) #Table 10
 sigma2_eps = 30
 
 #It takes a long time to run M = 100. One could reduce the time by setting M = 10
@@ -42,7 +42,7 @@ for(i in 1:length_prod_vec){
   
   time_vec[i] = as.numeric(difftime(end_time, start_time, units = "secs"))
   
-  print(paste(n_products, round(time_vec[i],3)))
+  print(paste(n_products, "Avg Time", round(time_vec[i]/M,3), "s"))
   
   RMSE_array[,2,i] = sqrt(mean(cov_ui))
   RMSE_array[,3,i] = sqrt(1/sum(solve(cov_ui)))
