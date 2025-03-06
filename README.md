@@ -4,7 +4,7 @@
  
 **Next, please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
 
-There are 4 folders with a detailed ReadMe file within each folder. Here, we briefly introduce each folder.
+**There are 4 folders with a detailed ReadMe file within each folder.** Here, we briefly introduce each folder.
 
 ### Code
 The code for producing the empirical results in the paper.  
