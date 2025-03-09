@@ -388,9 +388,9 @@ getConstCorCov = function(u_in){
 }
 
 SoptPlusEW <- function(train_data){
-  X <- as.matrix(train_data)
-  n = nrow(train_data)
-  k = ncol(train_data)
+  X <- scale(as.matrix(train_data), center = TRUE, scale = FALSE)
+  n = nrow(X) - 1
+  k = ncol(X)
   ew <- rep(1/ncol(X), ncol(X)) %>% as.matrix()
   l <- matrix(rep(1, ncol(X)), ncol = 1)
   covar <- 1/n*t(X)%*%X + 1e-10 * diag(ncol(train_data))
