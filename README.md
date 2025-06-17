@@ -1,8 +1,6 @@
 ## Code and Data for Paper 'Combining Forecasts from Multiple Experts for Multiple Variables'
  
-**Readers can begin by clicking the “Download Repository” tab in the top right corner.**
- 
-**Next, please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
+**Please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
 
 **There are 5 folders with a detailed ReadMe file within each folder.** Here, we briefly introduce each folder.
 
