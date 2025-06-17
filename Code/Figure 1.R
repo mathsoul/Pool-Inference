@@ -1,6 +1,4 @@
 library(tidyverse)
-library(purrr)
-library(tidyr)
 library(ggpubr)
 
 # This file generates Figure 1

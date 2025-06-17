@@ -11,7 +11,7 @@ n_periods = 28 #number of observations
 methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
 n_methods = length(methods)
 
-# team_idx_name = "TeamIndex/TopIdx2.Rdata" #Table 5
+team_idx_name = "TeamIndex/TopIdx2.Rdata" #Table 5
 # team_idx_name = "TeamIndex/TopIdx15.Rdata" #Table 6
 # team_idx_name = "TeamIndex/TopIdx3.Rdata" #Table EC.1
 # team_idx_name = "TeamIndex/TopIdx10.Rdata" #Table EC.2

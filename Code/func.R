@@ -420,3 +420,16 @@ extractNSub <- function(input_string) {
   return(number)
 }
 
+squareRoot = function(x){
+  start_idx = min(which(x != 0))
+  sqrt(mean((diff(x[start_idx:length(x)]))^2))
+}
+
+# Function to split ID into components
+splitId <- function(id) {
+  parts <- strsplit(id, "_")[[1]]
+  if (length(parts) != 6) {
+    stop(paste("ID", id, "does not contain exactly 5 underscores (6 parts)"))
+  }
+  return(parts)
+}

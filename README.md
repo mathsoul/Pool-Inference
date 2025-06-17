@@ -1,4 +1,4 @@
-## Code for Paper 'Combining Forecasts from Multiple Experts for Multiple Variables'
+## Code and Data for Paper 'Combining Forecasts from Multiple Experts for Multiple Variables'
  
 **Readers can begin by clicking the “Download Repository” tab in the top right corner.**
  
@@ -12,7 +12,7 @@ The code for producing the empirical results in the paper.
 ### M4RawData
 Details of where to obtain the raw data for both the M4 competitions and the corresponding data manipulation procedures. 
 
-### M4RawData
+### M5RawData
 Details of where to obtain the raw data for both the M5 competitions and the corresponding data manipulation procedures. 
 
 ### CleanedData 
