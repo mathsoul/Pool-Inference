@@ -18,7 +18,7 @@ n_methods = length(methods)
 # team_idx_name = "TeamIndex/MaxIdx2.Rdata" #Table EC.5
 # team_idx_name = "TeamIndex/MaxIdx15.Rdata" #Table EC.6
 # team_idx_name = "TeamIndex/Max17Idx2.Rdata" #Table EC.9
-team_idx_name = "TeamIndex/Max17Idx15.Rdata" #Table EC.10
+# team_idx_name = "TeamIndex/Max17Idx15.Rdata" #Table EC.10
 
 n_sub = extractNSub(team_idx_name) #number of experts in aggregation
 load(team_idx_name)
