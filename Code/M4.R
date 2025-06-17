@@ -12,12 +12,12 @@ source("Code/func.R")
 
 load("CleanedData/M4.Rdata")
 
-# team_idx_name = "TeamIndex/M4TopIdx2.Rdata" #Table 7. Takes 3 hours using 7 cores.
+team_idx_name = "TeamIndex/M4TopIdx2.Rdata" #Table 7. Takes 3 hours using 7 cores.
 # team_idx_name = "TeamIndex/M4TopIdx15.Rdata" #Table 8. Takes 5 hours using 7 cores.
 # team_idx_name = "TeamIndex/M4TopIdx3.Rdata" #Table EC.3. Takes 4 hours using 7 cores.
 # team_idx_name = "TeamIndex/M4TopIdx10.Rdata" #Table EC.4. Takes 4 hours using 7 cores.
 # team_idx_name = "TeamIndex/M4MaxIdx2.Rdata" #Table EC.7. Takes 3 hours using 7 cores.
-team_idx_name = "TeamIndex/M4MaxIdx15.Rdata" #Table EC.8. Takes 5 hours using 7 cores.
+# team_idx_name = "TeamIndex/M4MaxIdx15.Rdata" #Table EC.8. Takes 5 hours using 7 cores.
 
 load(team_idx_name)
 

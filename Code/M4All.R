@@ -9,19 +9,15 @@ n_experts = 17 #total number of experts
 n_periods = 48 #number of observations
 n_prods = 119
 
-
-
 methods = c("EW", "Sample", "Linear", "Cor", "S+EW", "Var", "Rob")
 n_methods = length(methods)
-
-#make it into a function
 
 display_mat = matrix(NA, nrow = 1, ncol = 1 + length(methods),
                      dimnames = list("All", 
                                      c("P:Linear", "S:EW", "S:Sample", "S:Linear",
                                        "S:Cor", "S:S+EW", "S:Var", "S:Rob")))
 
-true_data = data_test %>% dplyr::select(-V1)
+true_data = data_test %>% dplyr::select(-id)
 f_comb = f_data %>% dplyr::select(-id, -group_id)
 u_comb = u_data %>% dplyr::select(-id, -group_id)
 

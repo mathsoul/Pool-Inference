@@ -238,8 +238,8 @@ getWRMSSE4AllMethodsM4 = function(sep_methods, series_idx, team_idx,
   n_experts = length(team_idx)
   n_sep_methods = length(sep_methods)
   
-  true_data = data_test %>% filter(V1 %in% paste0("H", series_idx)) %>% arrange(V1) %>%
-    dplyr::select(-V1)
+  true_data = data_test %>% filter(id %in% paste0("H", series_idx)) %>% arrange(id) %>%
+    dplyr::select(-id)
   
   f_comb = f_data %>% filter(id %in% paste0("H", series_idx) & group_id %in% team_idx) %>%
     arrange(id, group_id) %>% dplyr::select(-id, -group_id)

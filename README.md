@@ -4,13 +4,16 @@
  
 **Next, please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
 
-**There are 4 folders with a detailed ReadMe file within each folder.** Here, we briefly introduce each folder.
+**There are 5 folders with a detailed ReadMe file within each folder.** Here, we briefly introduce each folder.
 
 ### Code
 The code for producing the empirical results in the paper.  
 
-### RawData
-Details of where to obtain the raw data for both the M4 and M5 competitions. 
+### M4RawData
+Details of where to obtain the raw data for both the M4 competitions and the corresponding data manipulation procedures. 
+
+### M4RawData
+Details of where to obtain the raw data for both the M5 competitions and the corresponding data manipulation procedures. 
 
 ### CleanedData 
 The data that are cleaned from the raw data.
