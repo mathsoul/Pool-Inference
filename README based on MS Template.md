@@ -132,9 +132,9 @@ This folder contains the raw data from the M5 Competition along with code for da
 ### CleanedData 
 This folder contains preprocessed datasets for the M4 and M5 competitions.  
 - **`M4.Rdata`**  
-  - Generated using the cleaning procedures documented in the [`M4RawData`](../M4RawData) folder.  
+  - Generated using the cleaning procedures documented in the [`M4RawData`](/M4RawData) folder.  
 - **`M5.Rdata`**  
-  - Generated using the cleaning procedures documented in the [`M5RawData`](../M5RawData) folder.  
+  - Generated using the cleaning procedures documented in the [`M5RawData`](/M5RawData) folder.  
 
 #### M4.Rdata
 - It contains three data frames: data_test, f_data, and u_data.
