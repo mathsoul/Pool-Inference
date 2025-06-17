@@ -1,6 +1,6 @@
 ## Code and Data for Paper 'Combining Forecasts from Multiple Experts for Multiple Variables'
 
-**This folder is also available on [GitHub](https://github.com/mathsoul/Pool-Inference/blob/main/README.md)**
+**This folder is also available on [GitHub](https://github.com/mathsoul/Pool-Inference?tab=readme-ov-file).**
  
 **Please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
 
