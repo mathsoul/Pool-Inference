@@ -171,7 +171,7 @@ This folder contains preprocessed datasets for the M4 and M5 competitions.
     - Max17Idx15.Rdata: Table EC.10
     
 ## Computational requirements
-- We use R (version 4.4.1) and Rstudio (version 2025.05.0+496) with the help of following packages.
+- We use R (version 4.4.1) and RStudio (version 2025.05.0+496) with the help of following packages.
 	- tidyverse (2.0.0)
 	- nlshrink (1.0.1)
 	- MASS (7.3-61)
