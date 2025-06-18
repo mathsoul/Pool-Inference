@@ -352,5 +352,7 @@ display_mat["L9",] = c(getWRMSSE(u_pool_Linear, weight_vec = weight_vec),
                        apply(u_sep_methods, 1, getWRMSSE, weight_vec = weight_vec))
 
 # Print out results -------------------------------------------------------
-print(display_mat, digits = 3)
+N_var_vec = c(3,10,3,7,9,21,30,70)
+
+print(cbind(N_var = N_var_vec, display_mat), digits = 3)
 print(apply(display_mat, 1, which.min))
