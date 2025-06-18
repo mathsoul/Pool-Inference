@@ -24,10 +24,11 @@ This folder contains the raw data from the M5 Competition along with code for da
 ### M5 Data Preparation
 **File:** `M5DataManu.R`  
 **Requirements:**
-1. Download all submissions from:  
+1. **Please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
+2. Download all submissions from:  
    [M5 Competition Google Drive - Accuracy Submissions](https://drive.google.com/drive/folders/1NZ1q8Z0gL20TED_W0Phv796MzwghOoPE)
-2. Unzip all submissions directly in a subfolder called **Submissions**.
-3. Download `sales_train_evaluation.csv` from [M5 Competition Google Drive - Dataset](https://drive.google.com/drive/folders/1wxz-TAfVE7uKGCjh405eCb2Q_pG3kAm9). 
+3. Unzip all submissions directly in a subfolder called **Submissions**.
+4. Download `sales_train_evaluation.csv` from [M5 Competition Google Drive - Dataset](https://drive.google.com/drive/folders/1wxz-TAfVE7uKGCjh405eCb2Q_pG3kAm9). 
 
 **Methodology:**
 - Implements data scaling using the Root Mean Squared Error (RMSE) methodology described in:  

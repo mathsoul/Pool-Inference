@@ -33,9 +33,10 @@ This folder contains the raw data from the M4 Competition along with code for da
 ### M4 Data Preparation
 **File:** `M4DataManu.R`  
 **Requirements:**
-1. Download all submissions or the top 17 submissions (IDs: 005, 036, 039, 069, 072, 078, 104, 118, 132, 235, 237, 238, 243, 245, 250, 251, 260) from:  
+1. **Please first install RStudio and then double click the 'Pool Inference.Rproj' file to open the project. It automatically sets the right working directory.**
+2. Download all submissions or the top 17 submissions (IDs: 005, 036, 039, 069, 072, 078, 104, 118, 132, 235, 237, 238, 243, 245, 250, 251, 260) from:  
    [M4 Competition GitHub - Point Forecasts](https://github.com/Mcompetitions/M4-methods/tree/master/Point%20Forecasts)
-2. Unzip all of them in this folder.
+3. Unzip all of them in this folder.
 
 **Methodology:**
 - Implements data scaling using the Mean Absolute Scaled Error (MASE) methodology described in:  
