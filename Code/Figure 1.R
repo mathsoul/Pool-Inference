@@ -87,7 +87,9 @@ p3 = ggplot(df4plot_long, aes(Sigma2_2, Weight, linetype = Type)) + geom_line(li
   theme_bw(18) + theme(legend.text = element_text(size = 25)) + 
   scale_linetype_discrete(name = "")
 
+print(ggarrange(p1, p2, p3, ncol=3, nrow=1, common.legend = TRUE, legend="top"))
 
-# pdf("FigurePool/wMatSigma2Prod1.pdf", width = 16, height = 6)
-ggarrange(p1, p2, p3, ncol=3, nrow=1, common.legend = TRUE, legend="top")
+# To match the plot sizes used in the paper, uncomment the following code:
+# pdf("wMatSigma2Prod1.pdf", width = 16, height = 6)
+# ggarrange(p1, p2, p3, ncol=3, nrow=1, common.legend = TRUE, legend="top")
 # dev.off()
