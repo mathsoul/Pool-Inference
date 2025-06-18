@@ -48,7 +48,7 @@ for(j in 1:length(prods_vec)){
 
 rownames(display_mat) = prods_vec
 
-xtable(display_mat, digits = 3)
+print(display_mat, digits = 3)
 win_pct_vec
 
 
